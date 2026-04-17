@@ -1,0 +1,17 @@
+{
+  "name": "ai-mock-job-interview",
+  "version": "1.0.0",
+  "description": "Full-stack AI Mock Job Interview application",
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm start",
+    "seed": "cd server && node ../database/seed.js",
+    "build:client": "cd client && npm run build"
+  },
+  "author": "AI Mock Interview",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^9.3.1"
+  }
+}
