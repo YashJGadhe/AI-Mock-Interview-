@@ -1,25 +1,29 @@
 /**
  * Database Seed Script
  * Populates the database with sample resources and a demo user
- * Run: node database/seed.js (from server directory)
+ *
+ * Run from project root:
+ * node database/seed.js
  */
 
 require('dotenv').config({ path: '../server/.env' });
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
-// Adjust path for running from server/ directory
-const User = require('./models/User');
-const Resource = require('./models/Resource');
+const mongoose = require('../server/node_modules/mongoose');
+const bcrypt = require('../server/node_modules/bcryptjs');
+
+const User = require('../server/models/User');
+const Resource = require('../server/models/Resource');
 
 const MONGODB_URI =
-  process.env.MONGODB_URI || 'mongodb://localhost:27017/ai_mock_interview';
+  process.env.MONGODB_URI ||
+  'mongodb://127.0.0.1:27017/ai_mock_interview';
 
 const sampleResources = [
   // ── Tips ────────────────────────────────────────────────────────
   {
     title: 'The STAR Method for Behavioral Questions',
-    description: 'Master the Situation, Task, Action, Result framework for compelling answers.',
+    description:
+      'Master the Situation, Task, Action, Result framework for compelling answers.',
     type: 'tip',
     category: 'behavioral',
     difficulty: 'all',
@@ -29,21 +33,25 @@ const sampleResources = [
     isFeatured: true,
     order: 1,
   },
+
   {
     title: 'Research the Company Thoroughly',
-    description: 'Know the company\'s mission, products, culture, and recent news before your interview.',
+    description:
+      "Know the company's mission, products, culture, and recent news before your interview.",
     type: 'tip',
     category: 'general',
     difficulty: 'all',
     content:
-      'Before any interview:\n- Read the company\'s About page and mission statement\n- Review recent press releases and news articles\n- Understand their main products/services and target customers\n- Research the company culture on Glassdoor\n- Prepare questions that show you\'ve done your homework\n\nInterviewers appreciate candidates who show genuine interest in the company.',
+      "Before any interview:\n- Read the company's About page and mission statement\n- Review recent press releases and news articles\n- Understand their main products/services and target customers\n- Research the company culture on Glassdoor\n- Prepare questions that show you've done your homework\n\nInterviewers appreciate candidates who show genuine interest in the company.",
     tags: ['preparation', 'research', 'general'],
     isFeatured: true,
     order: 2,
   },
+
   {
     title: 'Answering "Tell Me About Yourself"',
-    description: 'Craft a compelling 2-minute professional narrative that sets the tone.',
+    description:
+      'Craft a compelling 2-minute professional narrative that sets the tone.',
     type: 'tip',
     category: 'hr',
     difficulty: 'easy',
@@ -53,9 +61,11 @@ const sampleResources = [
     isFeatured: false,
     order: 3,
   },
+
   {
     title: 'Technical Interview Preparation Checklist',
-    description: 'A comprehensive checklist to ace your technical interviews.',
+    description:
+      'A comprehensive checklist to ace your technical interviews.',
     type: 'guide',
     category: 'technical',
     difficulty: 'medium',
@@ -65,9 +75,11 @@ const sampleResources = [
     isFeatured: true,
     order: 4,
   },
+
   {
     title: 'Salary Negotiation Tactics',
-    description: 'Negotiate confidently and get the compensation you deserve.',
+    description:
+      'Negotiate confidently and get the compensation you deserve.',
     type: 'tip',
     category: 'salary',
     difficulty: 'medium',
@@ -81,7 +93,8 @@ const sampleResources = [
   // ── Questions ────────────────────────────────────────────────────
   {
     title: 'Where do you see yourself in 5 years?',
-    description: 'A classic question about career vision and goal-setting.',
+    description:
+      'A classic question about career vision and goal-setting.',
     type: 'question',
     category: 'hr',
     difficulty: 'easy',
@@ -91,9 +104,11 @@ const sampleResources = [
     isFeatured: false,
     order: 6,
   },
+
   {
     title: 'Explain a complex technical concept simply',
-    description: 'Tests communication skills and depth of understanding.',
+    description:
+      'Tests communication skills and depth of understanding.',
     type: 'question',
     category: 'technical',
     difficulty: 'medium',
@@ -103,9 +118,11 @@ const sampleResources = [
     isFeatured: false,
     order: 7,
   },
+
   {
     title: 'Tell me about a time you failed',
-    description: 'Classic behavioral question testing self-awareness and growth mindset.',
+    description:
+      'Classic behavioral question testing self-awareness and growth mindset.',
     type: 'question',
     category: 'behavioral',
     difficulty: 'medium',
@@ -119,36 +136,44 @@ const sampleResources = [
   // ── Videos ────────────────────────────────────────────────────────
   {
     title: 'Mock Interview: Software Engineer at Google',
-    description: 'Watch a full technical interview simulation with expert commentary.',
+    description:
+      'Watch a full technical interview simulation with expert commentary.',
     type: 'video',
     category: 'technical',
     difficulty: 'hard',
     url: 'https://www.youtube.com/watch?v=mock1',
-    content: 'A complete mock technical interview covering data structures, algorithms, and system design with detailed feedback.',
+    content:
+      'A complete mock technical interview covering data structures, algorithms, and system design with detailed feedback.',
     tags: ['google', 'technical', 'mock'],
     isFeatured: true,
     order: 9,
   },
+
   {
     title: 'How to Answer Behavioral Questions Like a Pro',
-    description: 'Expert guide to mastering the STAR method in under 20 minutes.',
+    description:
+      'Expert guide to mastering the STAR method in under 20 minutes.',
     type: 'video',
     category: 'behavioral',
     difficulty: 'easy',
     url: 'https://www.youtube.com/watch?v=mock2',
-    content: 'Step-by-step tutorial on crafting compelling behavioral answers using the STAR framework.',
+    content:
+      'Step-by-step tutorial on crafting compelling behavioral answers using the STAR framework.',
     tags: ['behavioral', 'star-method', 'tutorial'],
     isFeatured: false,
     order: 10,
   },
+
   {
     title: 'Salary Negotiation Master Class',
-    description: 'Learn from a hiring manager how to negotiate your best offer.',
+    description:
+      'Learn from a hiring manager how to negotiate your best offer.',
     type: 'video',
     category: 'salary',
     difficulty: 'medium',
     url: 'https://www.youtube.com/watch?v=mock3',
-    content: 'Real tactics from a hiring manager\'s perspective on what works in salary negotiations.',
+    content:
+      "Real tactics from a hiring manager's perspective on what works in salary negotiations.",
     tags: ['salary', 'negotiation', 'compensation'],
     isFeatured: false,
     order: 11,
@@ -157,7 +182,8 @@ const sampleResources = [
   // ── Articles ──────────────────────────────────────────────────────
   {
     title: '10 Questions to Ask Your Interviewer',
-    description: 'Make a lasting impression by asking thoughtful, strategic questions.',
+    description:
+      'Make a lasting impression by asking thoughtful, strategic questions.',
     type: 'article',
     category: 'general',
     difficulty: 'all',
@@ -167,9 +193,11 @@ const sampleResources = [
     isFeatured: true,
     order: 12,
   },
+
   {
     title: 'Remote Interview Best Practices',
-    description: 'Set yourself up for success in virtual interviews.',
+    description:
+      'Set yourself up for success in virtual interviews.',
     type: 'article',
     category: 'general',
     difficulty: 'easy',
@@ -183,19 +211,70 @@ const sampleResources = [
 
 async function seed() {
   try {
-    await mongoose.connect(MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
+    console.log('Connecting to MongoDB...');
+    console.log('MongoDB URI:', MONGODB_URI.replace(/\/\/.*@/, '//***@'));
 
-    // Clear existing data
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+      socketTimeoutMS: 20000,
+    });
+
+    console.log('✅ Connected to MongoDB');
+    console.log('MongoDB readyState:', mongoose.connection.readyState);
+    console.log('MongoDB database:', mongoose.connection.name);
+    console.log('MongoDB host:', mongoose.connection.host);
+
+    console.log('Resource model database:', Resource.db.name);
+    console.log('Resource model readyState:', Resource.db.readyState);
+    console.log('User model database:', User.db.name);
+    console.log('User model readyState:', User.db.readyState);
+
+    // Make sure models are using the same active connection
+    if (Resource.db !== mongoose.connection) {
+      throw new Error(
+        'Resource model is using a different MongoDB connection.'
+      );
+    }
+
+    if (User.db !== mongoose.connection) {
+      throw new Error(
+        'User model is using a different MongoDB connection.'
+      );
+    }
+
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('MongoDB connection is not ready.');
+    }
+
+    // Test database access before deleting anything
+    console.log('Testing MongoDB access...');
+
+    await mongoose.connection.db.admin().ping();
+
+    console.log('✅ MongoDB ping successful');
+
+    // Clear existing resources
+    console.log('Clearing existing resources...');
+
     await Resource.deleteMany({});
-    console.log('🗑️  Cleared existing resources');
+
+    console.log('🗑️ Cleared existing resources');
 
     // Insert resources
+    console.log('Inserting resources...');
+
     await Resource.insertMany(sampleResources);
+
     console.log(`✅ Inserted ${sampleResources.length} resources`);
 
     // Create demo user
-    await User.deleteOne({ email: 'demo@aiinterview.com' });
+    console.log('Creating demo user...');
+
+    await User.deleteOne({
+      email: 'demo@aiinterview.com',
+    });
+
     const demoUser = await User.create({
       name: 'Alex Johnson',
       email: 'demo@aiinterview.com',
@@ -204,22 +283,40 @@ async function seed() {
       jobTitle: 'Software Developer',
       targetRole: 'Senior Software Engineer',
       experience: '3-5 years',
-      skills: ['JavaScript', 'React', 'Node.js', 'Python', 'MongoDB'],
+      skills: [
+        'JavaScript',
+        'React',
+        'Node.js',
+        'Python',
+        'MongoDB',
+      ],
       stats: {
         totalInterviews: 5,
         averageScore: 72,
         bestScore: 88,
         totalTime: 125,
-        interviewsByType: { hr: 2, technical: 2, behavioral: 1 },
+        interviewsByType: {
+          hr: 2,
+          technical: 2,
+          behavioral: 1,
+        },
       },
     });
 
-    console.log(`✅ Demo user created: ${demoUser.email} / demo123456`);
+    console.log(
+      `✅ Demo user created: ${demoUser.email} / demo123456`
+    );
+
     console.log('\n🎉 Database seeded successfully!\n');
-    process.exit(0);
   } catch (error) {
-    console.error('❌ Seeding failed:', error);
-    process.exit(1);
+    console.error('\n❌ Seeding failed:');
+    console.error(error);
+    process.exitCode = 1;
+  } finally {
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+      console.log('MongoDB connection closed.');
+    }
   }
 }
 
